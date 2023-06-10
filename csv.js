@@ -1,3 +1,4 @@
+const { log } = require("console");
 const fs = require("fs");
 
 function getStudentsFromCsvfile(callback) {
@@ -34,7 +35,40 @@ function addStudentToCsvFile(student, callback) {
     });
 }
 
+function updateStudentInCsvFile(id, updatedStudent, callback) {
+  fs.readFile('./student.csv', 'utf8', (err, data) => {
+    if (err) {
+      callback(err);
+      return;
+    }
+
+    const rows = data.split('\n');
+    const headerRow = rows.shift(); // 移除标题行
+
+    if (id < 0 || id >= rows.length) {
+      callback(new Error('Invalid student ID'));
+      return;
+    }
+
+    rows[id] = updatedStudent.trim();
+
+    let csvContent = headerRow + '\n' + rows.join('\n');
+
+    fs.writeFile('./student.csv', csvContent, err => {
+      if (err) {
+        callback(err);
+        return;
+      }
+      callback(null);
+    });
+  });
+}
+
+
+  
+
 module.exports = {
     getStudentsFromCsvfile,
     addStudentToCsvFile,
+    updateStudentInCsvFile,
 };

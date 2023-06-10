@@ -41,4 +41,17 @@ function requireLogin(req, res, next) {
   }
 }
 
-module.exports = { myAsyncAuthorizer, requireLogin }
+function authenticateAndAuthorize(username, password, id) {
+  const studentData = fs.readFileSync('studentdetail.csv', 'utf8');
+  const rows = studentData.split('\n').slice(1);
+  for (let row of rows) {
+    const [userID, user, pass] = row.split(',');
+    if (user === username && pass === password && userID === id) {
+      return true;
+    }
+  }
+  return false;
+}
+
+
+module.exports = { myAsyncAuthorizer, requireLogin, authenticateAndAuthorize }

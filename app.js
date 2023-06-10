@@ -4,12 +4,13 @@ const os = require("os");
 const { studentRouter } = require("./api");
 const app = express();
 const port = 3000;
-const { getStudentsFromCsvfile, addStudentToCsvFile } = require("./csv");
+const { getStudentsFromCsvfile, addStudentToCsvFile, updateStudentInCsvFile } = require("./csv");
 const fs = require("fs");
 const basicAuth = require("express-basic-auth");
 var cookieParser = require("cookie-parser");
 const { myAsyncAuthorizer, requireLogin } = require("./functions");
 const session = require('express-session');
+const bodyParser = require('body-parser');
 
 app.use(session({
   secret: 'your-secret-key',
@@ -22,6 +23,8 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/students", studentRouter);
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views/login.html'));
@@ -105,6 +108,57 @@ app.post("/api/login", (req, res) => {
   };
   res.cookie("auth-token", token, tokenCookie);
   res.json({ message: "Login successful" });
+});
+
+// app.get('/students/:id', function(req, res) {
+//   const fakeStudent = {
+//     name: "FakeStudent",
+//     school: "FakeSchool"
+//   };
+//   res.render('student_details', { student: fakeStudent });
+// });
+
+app.get('/students/:id', (req, res) => {
+  const id = req.params.id;
+  console.log(id);
+  getStudentsFromCsvfile((err, students) => {
+    if (err) {
+      return res.status(500).send(err.message);
+    };
+    const student = students[id - 1];
+    if (student) {
+      return res.render('student_details', { student, id });
+    } else {
+      return res.send("<script>alert('Invalid Student\\'s ID'); window.location.href='/students';</script>");
+    }
+  });
+});
+
+
+app.post('/students/:id', (req, res) => {
+  const id = req.params.id;
+  console.log(id);
+  const csvLine = `\n${req.body.name},${req.body.school}`;
+  console.log(csvLine);
+  updateStudentInCsvFile(id-1, csvLine, (err) => {
+    if (err) {
+      res.status(500).send(err.message);
+    } else {
+      res.redirect('/students/' + id);
+    }
+  });
+});
+
+app.put('/api/students/:id/update', (req, res) => {
+  const updatedStudent = `${req.body.name},${req.body.school}`;
+  const id = req.params.id;
+  updateStudentInCsvFile(id-1, updatedStudent, err => {
+    if (err) {
+      res.status(500).send(err.message);
+    } else {
+      res.json({ success: true });
+    }
+  });
 });
 
 app.listen(port, () => {

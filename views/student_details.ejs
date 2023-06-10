@@ -1,0 +1,144 @@
+<!-- <!DOCTYPE html>
+<html>
+<head>
+  <title>Student Details</title>
+</head>
+<body>
+  <h1><%= student.name %></h1>
+  <p>School: <%= student.school %></p>
+</body>
+<button id="toggleFormButton">Update student's info</button>
+
+<form id="updateForm" action="" method="post" style="display: none;">
+  <label for="name">Name:</label><br>
+  <input type="text" id="name" name="name" value="<%= student.name %>"><br>
+  <label for="school">School:</label><br>
+  <input type="text" id="school" name="school" value="<%= student.school %>"><br>
+  <input type="hidden" id="studentId" name="studentId">
+  <input type="submit" value="Confirm">
+</form>
+
+<script>
+document.getElementById('toggleFormButton').addEventListener('click', function () {
+  const form = document.getElementById('updateForm');
+  if (form.style.display === 'none') {
+    form.style.display = 'block';
+    form.querySelector('#studentId').value = calculateStudentId();
+  } else {
+    form.style.display = 'none';
+  }
+});
+
+function calculateStudentId() {
+  const url = window.location.href;
+  const regex = /\/students\/(\d+)/;
+  const match = url.match(regex);
+  const studentId = match ? match[1] : '';
+  return studentId;
+}
+
+const updateForm = document.getElementById('updateForm');
+updateForm.action = "/students/" + calculateStudentId();
+</script>
+
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Student Details</title>
+</head>
+<body>
+  <h1><%= student.name %></h1>
+  <p>School: <%= student.school %></p>
+</body>
+<button id="toggleFormButton">Update student's info</button>
+
+<form id="updateForm" action="" method="post" style="display: none;">
+  <label for="name">Name:</label><br>
+  <input type="text" id="name" name="name" value="<%= student.name %>"><br>
+  <label for="school">School:</label><br>
+  <input type="text" id="school" name="school" value="<%= student.school %>"><br>
+  <input type="hidden" id="studentId" name="studentId">
+  <input type="submit" value="Confirm">
+</form>
+
+<script>
+document.getElementById('toggleFormButton').addEventListener('click', function () {
+  const form = document.getElementById('updateForm');
+  if (form.style.display === 'none') {
+    form.style.display = 'block';
+    form.querySelector('#studentId').value = calculateStudentId();
+  } else {
+    form.style.display = 'none';
+  }
+});
+
+function calculateStudentId() {
+  const url = window.location.href;
+  const regex = /\/students\/(\d+)/;
+  const match = url.match(regex);
+  const studentId = match ? match[1] : '';
+  return studentId;
+}
+
+function authenticateAndAuthorize(username, password, id) {
+  const studentData = fs.readFileSync('studentdetail.csv', 'utf8');
+  const rows = studentData.split('\n').slice(1);
+  for (let row of rows) {
+    const [userID, user, pass] = row.split(',');
+    if (user === username && pass === password && userID === id.toString()) {
+      return true;
+    }
+  }
+  return false;
+}
+
+const updateForm = document.getElementById('updateForm');
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const username = prompt('Please enter your username:').toString();
+      alert(username)
+      const password = prompt('Please enter your password:').toString();
+      alert(password)
+      const studentId = calculateStudentId().toString();
+      alert(studentId)
+      // 调用您的验证和授权函数
+      if (authenticateAndAuthorize(username, password, studentId)) {
+            alert('Access denied');
+          } else {
+            // 验证失败，处理无权限访问学生页面的逻辑
+            alert('Access denied');
+            window.location.href = '/students'; // 重定向到学生列表页面
+          }
+});
+
+
+updateForm.addEventListener('submit', function(e) {
+  e.preventDefault(); // Prevent the form from submitting in the traditional way
+  const studentId = calculateStudentId();
+  const url = "/api/students/" + studentId + "/update";
+  const data = {
+    name: document.getElementById('name').value,
+    school: document.getElementById('school').value,
+  };
+  
+  fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(data),
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Success:', data);
+    location.reload(); // 刷新页面
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+  });
+});
+</script>
+
+</html>
