@@ -1,0 +1,25 @@
+@import 'normalize.css';
+
+body {
+    background-color: blue;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+h1 {
+    text-align: center;
+}
+
+ul {
+    background-color: cyan;
+}
+
+p {
+    background-color: yellow
+}
+
+@media (max-width: 1000px){
+    p.long-text {
+        display: none;
+    }
+}

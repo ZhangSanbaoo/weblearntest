@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <h1>Students</h1>
+  <p class="long-text">
+    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vitae massa non urna pulvinar pharetra. Phasellus vulputate condimentum scelerisque. Maecenas ipsum libero, cursus eget eleifend a, rutrum nec est. Cras fermentum maximus mauris, quis pulvinar sem facilisis et. Nunc a libero eleifend, volutpat ligula id, pharetra nisi. Suspendisse tempus, leo ac faucibus porttitor, nunc leo varius mi, id auctor nunc tellus nec diam. Integer dictum orci quis justo blandit efficitur. Aenean lorem erat, euismod porttitor laoreet eu, auctor sit amet massa. Duis vel lobortis augue. Duis sem sapien, blandit a ultrices sit amet, lacinia ac urna. Quisque orci sapien, convallis ut convallis vel, pretium sit amet purus. Quisque nunc lacus, interdum eu venenatis et, tincidunt eget quam. Pellentesque consequat urna eu sem vehicula auctor. Maecenas id odio nec dui molestie eleifend fermentum tempus est. Donec vitae ligula ornare, malesuada tortor id, scelerisque leo.
+  </p>
+  <ul>
+  <% students.forEach(function(student) { %>
+    <li><%= student.name %> | <%= student.school %></li>
+  <% }) %>
+  </ul>
+  <button id="test">Click me</button>
+  <script type="text/javascript" src="/students.js"></script>
+</body>
+</html>

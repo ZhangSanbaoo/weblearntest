@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.css" integrity="sha512-GQSxWe9Cj4o4EduO7zO9HjULmD4olIjiQqZ7VJuwBxZlkWaUFGCxRkn39jYnD2xZBtEilm0m4WBG7YEmQuMs5Q==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js" integrity="sha512-+IpCthlNahOuERYUSnKFjzjdKXIbJ/7Dd6xvUp+7bEw0Jp2dg6tluyxLs+zq9BMzZgrLv8886T4cBSqnKiVgUw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.js" integrity="sha512-11Z4MD9csmC3vH8Vd0eIPJBQu3uEHEqeznWEt3sLBCdQx3zm9mJbBcJH8WTcyGY9EXDE81BNpjE2vLosPK8cFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <div id="chart"></div>
+    <div id="chart2"></div>
+    <script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function () {
+        d3.select("body").style("background-color", "#e0f0f5");
+
+        d3.csv("/covid-19-students-delhi.csv")
+          .then(function (data) {
+            generateFirstChart(data);
+            generateSecondChart(data);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+    });
+
+    function generateFirstChart(data) {
+      var stressBustersCount = {};
+
+      data.forEach(function (d){
+          var stressBusterName = d["Stress busters"];
+          if (typeof stressBustersCount[stressBusterName] === "undefined"){
+              stressBustersCount[stressBusterName] = 0;
+          }
+          stressBustersCount[stressBusterName]++;
+      });
+
+      var sortedData = Object.entries(stressBustersCount)
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 5);
+
+      const counts = sortedData.map(entry => entry[1]);
+      const categories = sortedData.map(entry => entry[0]);
+      
+      var chart = c3.generate({
+        bindto: '#chart',
+        data: {
+            columns: [
+                ['Stress busters', ...counts]
+            ],
+            type: 'bar'
+        },
+        axis: {
+            x: {
+                type: 'category',
+                categories: categories
+            }
+        }
+      });
+    }
+
+    function generateSecondChart(data) {
+      var healthIssuesCount = {};
+      data.forEach(function (row) {
+        var healthIssue = row["Health issue during lockdown"];
+        if (healthIssuesCount[healthIssue])
+        {
+healthIssuesCount[healthIssue]++;
+} else {
+healthIssuesCount[healthIssue] = 1;
+}
+});
+var pieChartData = Object.entries(healthIssuesCount).map(function (entry) {
+    return {
+      label: entry[0],
+      value: entry[1]
+    };
+  });
+  var chart = c3.generate({
+    bindto: '#chart2',
+    data: {
+        // iris data from R
+        columns: [
+            ['data1', 30],
+            ['data2', 120],
+        ],
+        type : 'pie',
+        onclick: function (d, i) { console.log("onclick", d, i); },
+        onmouseover: function (d, i) { console.log("onmouseover", d, i); },
+        onmouseout: function (d, i) { console.log("onmouseout", d, i); }
+    }
+});
+
+setTimeout(function () {
+    chart.load({
+        columns: [
+            ["setosa", 0.2, 0.2, 0.2, 0.2, 0.2, 0.4, 0.3, 0.2, 0.2, 0.1, 0.2, 0.2, 0.1, 0.1, 0.2, 0.4, 0.4, 0.3, 0.3, 0.3, 0.2, 0.4, 0.2, 0.5, 0.2, 0.2, 0.4, 0.2, 0.2, 0.2, 0.2, 0.4, 0.1, 0.2, 0.2, 0.2, 0.2, 0.1, 0.2, 0.2, 0.3, 0.3, 0.2, 0.6, 0.4, 0.3, 0.2, 0.2, 0.2, 0.2],
+            ["versicolor", 1.4, 1.5, 1.5, 1.3, 1.5, 1.3, 1.6, 1.0, 1.3, 1.4, 1.0, 1.5, 1.0, 1.4, 1.3, 1.4, 1.5, 1.0, 1.5, 1.1, 1.8, 1.3, 1.5, 1.2, 1.3, 1.4, 1.4, 1.7, 1.5, 1.0, 1.1, 1.0, 1.2, 1.6, 1.5, 1.6, 1.5, 1.3, 1.3, 1.3, 1.2, 1.4, 1.2, 1.0, 1.3, 1.2, 1.3, 1.3, 1.1, 1.3],
+            ["virginica", 2.5, 1.9, 2.1, 1.8, 2.2, 2.1, 1.7, 1.8, 1.8, 2.5, 2.0, 1.9, 2.1, 2.0, 2.4, 2.3, 1.8, 2.2, 2.3, 1.5, 2.3, 2.0, 2.0, 1.8, 2.1, 1.8, 1.8, 1.8, 2.1, 1.6, 1.9, 2.0, 2.2, 1.5, 1.4, 2.3, 2.4, 1.8, 1.8, 2.1, 2.4, 2.3, 1.9, 2.3, 2.5, 2.3, 1.9, 2.0, 2.3, 1.8],
+        ]
+    });
+}, 1500);
+
+setTimeout(function () {
+    chart.unload({
+        ids: 'data1'
+    });
+    chart.unload({
+        ids: 'data2'
+    });
+}, 2500);
+  // var chart = c3.generate({
+  //   bindto: '#chart2',
+  //   data: {
+  //     columns: pieChartData,
+  //     type: 'pie'
+  //   }
+  // });
+}
+</script>
+</body>
+</html>

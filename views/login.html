@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" href="/login.css">
+</head>
+
+<body>
+    <form action="/login" method="POST">
+        <div class="segment">
+          <h1>
+            Sign up
+            <span class="rotate">: ]</span>
+          </h1>
+        </div>
+        <div>
+          <input type="text" placeholder="Username" name="Username" />
+        </div>
+        <div style="margin-top: 20px;"></div>
+        <div class="password-input">
+          <input type="password" placeholder="Password" name="Password" />
+          <button class="unit toggle-password-button" type="button">
+            <i class="icon ion-md-eye"></i>
+          </button>
+        </div>
+        <div style="margin-top: 20px;"></div>
+        <div>
+          <button class="red" type="submit">
+            <i class="icon ion-md-lock"></i> Log in
+          </button>
+        </div>
+        <div style="margin-top: 20px;"></div>
+        <button class="red register-button" type="button">
+          <i class="icon ion-md-person-add"></i> Register
+        </button>
+        <div class="segment">
+          <h1>
+            You can use admin as username and password
+          </h1>
+        </div>
+      </form>
+
+
+    <script>
+
+        var registerButton = document.querySelector('.register-button');
+
+
+        registerButton.addEventListener('click', function () {
+            alert('Register button clicked!');
+        });
+    </script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>
