@@ -5,6 +5,14 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.min.js" integrity="sha512-+IpCthlNahOuERYUSnKFjzjdKXIbJ/7Dd6xvUp+7bEw0Jp2dg6tluyxLs+zq9BMzZgrLv8886T4cBSqnKiVgUw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.7.20/c3.js" integrity="sha512-11Z4MD9csmC3vH8Vd0eIPJBQu3uEHEqeznWEt3sLBCdQx3zm9mJbBcJH8WTcyGY9EXDE81BNpjE2vLosPK8cFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="/student_personal.css">
+    <style>
+        #back-button {
+            position: absolute;
+            top: 500px;
+            left: 800px;
+        }
+    </style>
 </head>
 <body>
     <div id="chart"></div>
@@ -120,5 +128,11 @@ setTimeout(function () {
 <div style="display: flex; justify-content: center;">
     <img src="/images/EPF_logo_2021.png" alt="Epf logo" style="max-width: 7%; height: auto;">
 </div>
+<button id="back-button" onclick="goBack()">Go back</button>
+  <script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
 </body>
 </html>
