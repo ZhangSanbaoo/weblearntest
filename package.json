@@ -51,6 +51,8 @@
     "on-finished": "^2.4.1",
     "parseurl": "^1.3.3",
     "path-to-regexp": "^0.1.7",
+    "prompt": "^1.3.0",
+    "prompt-sync": "^4.2.0",
     "proxy-addr": "^2.0.7",
     "qs": "^6.11.0",
     "range-parser": "^1.2.1",

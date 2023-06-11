@@ -8,9 +8,10 @@ const { getStudentsFromCsvfile, addStudentToCsvFile, updateStudentInCsvFile } = 
 const fs = require("fs");
 const basicAuth = require("express-basic-auth");
 var cookieParser = require("cookie-parser");
-const { myAsyncAuthorizer, requireLogin } = require("./functions");
+const { myAsyncAuthorizer, requireLogin, authenticateAndAuthorize } = require("./functions");
 const session = require('express-session');
 const bodyParser = require('body-parser');
+const prompt = require("prompt-sync")({ sigint: true });
 
 app.use(session({
   secret: 'your-secret-key',
@@ -127,20 +128,41 @@ app.get('/students/:id', (req, res) => {
     };
     const student = students[id - 1];
     if (student) {
-      return res.render('student_details', { student, id });
+      return res.render('student_verify', { student, id });
     } else {
       return res.send("<script>alert('Invalid Student\\'s ID'); window.location.href='/students';</script>");
     }
   });
 });
 
+app.get('/students/verify/:id', (req, res) => {
+  const username = req.query.username;
+  const password = req.query.password;
+  const id = req.params.id;
+
+  const isAuthenticated = authenticateAndAuthorize(username, password, id);
+  console.log(isAuthenticated);
+  if (isAuthenticated === true) {
+
+    getStudentsFromCsvfile((err, students) => {
+      if (err) {
+        return res.status(500).send(err.message);
+      };
+      const student = students[id - 1];
+      return res.render('student_details', { student, id }); // 
+    });
+  } else {
+
+    return res.send("<script>alert('Access denied, user doesn\\'t exist or password not correct'); window.location.href='/students';</script>");
+  }
+});
 
 app.post('/students/:id', (req, res) => {
   const id = req.params.id;
   console.log(id);
   const csvLine = `\n${req.body.name},${req.body.school}`;
   console.log(csvLine);
-  updateStudentInCsvFile(id-1, csvLine, (err) => {
+  updateStudentInCsvFile(id - 1, csvLine, (err) => {
     if (err) {
       res.status(500).send(err.message);
     } else {
@@ -152,7 +174,7 @@ app.post('/students/:id', (req, res) => {
 app.put('/api/students/:id/update', (req, res) => {
   const updatedStudent = `${req.body.name},${req.body.school}`;
   const id = req.params.id;
-  updateStudentInCsvFile(id-1, updatedStudent, err => {
+  updateStudentInCsvFile(id - 1, updatedStudent, err => {
     if (err) {
       res.status(500).send(err.message);
     } else {

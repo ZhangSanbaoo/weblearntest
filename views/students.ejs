@@ -1,19 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link rel="stylesheet" href="/style.css">
+  <link rel="stylesheet" href="/student.css">
 </head>
-<body>
-  <h1>Students</h1>
-  <p class="long-text">
+<body style="display: flex; flex-direction: column; align-items: center;">
+  <h1 style="display: flex; width: 70%; margin: 0 auto; justify-content: center;">Students</h1>
+  <div style="margin-top: 50px;"></div>
+  <div style="position: relative; width: 100%; height: auto; text-align: center;">
+      <div class="separator" style="max-width: 70%; height: auto; position: relative; left: 50%; transform: translateX(-50%);">
+          EPF Montpellier
+          <div class="separator__content">.Web Programming.</div>
+          <!-- Separator line -->
+          <div class="separator__separator"></div>
+          Data Engineering
+      </div>
+  </div>
+  <div style="margin-top: 50px;"></div>
+  <p class="long-text" style="display: flex; width: 70%; margin: 0 auto; justify-content: center;">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam vitae massa non urna pulvinar pharetra. Phasellus vulputate condimentum scelerisque. Maecenas ipsum libero, cursus eget eleifend a, rutrum nec est. Cras fermentum maximus mauris, quis pulvinar sem facilisis et. Nunc a libero eleifend, volutpat ligula id, pharetra nisi. Suspendisse tempus, leo ac faucibus porttitor, nunc leo varius mi, id auctor nunc tellus nec diam. Integer dictum orci quis justo blandit efficitur. Aenean lorem erat, euismod porttitor laoreet eu, auctor sit amet massa. Duis vel lobortis augue. Duis sem sapien, blandit a ultrices sit amet, lacinia ac urna. Quisque orci sapien, convallis ut convallis vel, pretium sit amet purus. Quisque nunc lacus, interdum eu venenatis et, tincidunt eget quam. Pellentesque consequat urna eu sem vehicula auctor. Maecenas id odio nec dui molestie eleifend fermentum tempus est. Donec vitae ligula ornare, malesuada tortor id, scelerisque leo.
   </p>
-  <ul>
-  <% students.forEach(function(student, index) { %>
-    <li><a href="/students/<%= index + 1 %>"><%= student.name %></a> | <%= student.school %></li>
-  <% }) %>
+  <div style="margin-top: 100px;"></div>
+  <ul style="display: flex; flex-direction: column; align-items: center; width: 50%; margin: 0 auto; justify-content: center;">
+    <% students.forEach(function(student, index) { %>
+      <li style="margin-bottom: 10px;"><a href="/students/<%= index + 1 %>"><%= student.name %></a> | <%= student.school %></li>
+    <% }) %>
   </ul>
-  <button id="test">Click me</button>
+  <div style="margin-top: 150px;"></div>
+  <div style="display: flex; width: 70%; margin: 0 auto; justify-content: center;">
+  <button id="test">Click me!</button>
+  </div>
   <script type="text/javascript" src="/students.js"></script>
 </body>
 </html>

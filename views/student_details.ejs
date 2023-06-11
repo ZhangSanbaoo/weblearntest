@@ -1,69 +1,44 @@
-<!-- <!DOCTYPE html>
-<html>
-<head>
-  <title>Student Details</title>
-</head>
-<body>
-  <h1><%= student.name %></h1>
-  <p>School: <%= student.school %></p>
-</body>
-<button id="toggleFormButton">Update student's info</button>
-
-<form id="updateForm" action="" method="post" style="display: none;">
-  <label for="name">Name:</label><br>
-  <input type="text" id="name" name="name" value="<%= student.name %>"><br>
-  <label for="school">School:</label><br>
-  <input type="text" id="school" name="school" value="<%= student.school %>"><br>
-  <input type="hidden" id="studentId" name="studentId">
-  <input type="submit" value="Confirm">
-</form>
-
-<script>
-document.getElementById('toggleFormButton').addEventListener('click', function () {
-  const form = document.getElementById('updateForm');
-  if (form.style.display === 'none') {
-    form.style.display = 'block';
-    form.querySelector('#studentId').value = calculateStudentId();
-  } else {
-    form.style.display = 'none';
-  }
-});
-
-function calculateStudentId() {
-  const url = window.location.href;
-  const regex = /\/students\/(\d+)/;
-  const match = url.match(regex);
-  const studentId = match ? match[1] : '';
-  return studentId;
-}
-
-const updateForm = document.getElementById('updateForm');
-updateForm.action = "/students/" + calculateStudentId();
-</script>
-
-</html> -->
-
 <!DOCTYPE html>
 <html>
 <head>
   <title>Student Details</title>
+  <link rel="stylesheet" href="/student_personal.css">
 </head>
 <body>
-  <h1><%= student.name %></h1>
-  <p>School: <%= student.school %></p>
+  <div style="margin-top: 100px;"></div>
+  <div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
+    <h1><%= student.name %></h1>
+    <p>School: <%= student.school %></p>
+  </div>
 </body>
+<div style="margin-top: 100px;"></div>
+<div style="display: flex; flex-direction: column; align-items: center; text-align: center;">
 <button id="toggleFormButton">Update student's info</button>
+</div>
 
-<form id="updateForm" action="" method="post" style="display: none;">
-  <label for="name">Name:</label><br>
-  <input type="text" id="name" name="name" value="<%= student.name %>"><br>
-  <label for="school">School:</label><br>
-  <input type="text" id="school" name="school" value="<%= student.school %>"><br>
-  <input type="hidden" id="studentId" name="studentId">
-  <input type="submit" value="Confirm">
-</form>
+<div style="display: flex; justify-content: center; align-items: center;">
+  <form id="updateForm" action="" method="post"0 style="display: none;">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" value="<%= student.name %>">
+    <div style="margin-top: 50px;"></div>
+    <label for="school">School:</label>
+    <input type="text" id="school" name="school" value="<%= student.school %>">
+    <input type="hidden" id="studentId" name="studentId">
+    <div style="margin-top: 25px;"></div>
+    <div style="display: flex; justify-content: center; align-items: center;">
+      <button class="red" type="submit">
+        <i class="icon ion-md-lock"></i> Confirm
+      </button>
+    </div>
+  </form>
+</div>
 
+<div style="margin-top: 50px;"></div>
+<div style="display: flex; justify-content: center;">
+    <img src="/images/EPF_logo_2021.png" alt="Epf logo" style="max-width: 7%; height: auto;">
+</div>
 <script>
+
 document.getElementById('toggleFormButton').addEventListener('click', function () {
   const form = document.getElementById('updateForm');
   if (form.style.display === 'none') {
@@ -76,53 +51,26 @@ document.getElementById('toggleFormButton').addEventListener('click', function (
 
 function calculateStudentId() {
   const url = window.location.href;
-  const regex = /\/students\/(\d+)/;
+  console.log(url);
+  const regex = /\/verify\/(\d+)/;
   const match = url.match(regex);
   const studentId = match ? match[1] : '';
   return studentId;
 }
 
-function authenticateAndAuthorize(username, password, id) {
-  const studentData = fs.readFileSync('studentdetail.csv', 'utf8');
-  const rows = studentData.split('\n').slice(1);
-  for (let row of rows) {
-    const [userID, user, pass] = row.split(',');
-    if (user === username && pass === password && userID === id.toString()) {
-      return true;
-    }
-  }
-  return false;
-}
-
 const updateForm = document.getElementById('updateForm');
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const username = prompt('Please enter your username:').toString();
-      alert(username)
-      const password = prompt('Please enter your password:').toString();
-      alert(password)
-      const studentId = calculateStudentId().toString();
-      alert(studentId)
-      // 调用您的验证和授权函数
-      if (authenticateAndAuthorize(username, password, studentId)) {
-            alert('Access denied');
-          } else {
-            // 验证失败，处理无权限访问学生页面的逻辑
-            alert('Access denied');
-            window.location.href = '/students'; // 重定向到学生列表页面
-          }
-});
-
 
 updateForm.addEventListener('submit', function(e) {
   e.preventDefault(); // Prevent the form from submitting in the traditional way
   const studentId = calculateStudentId();
+  console.log(studentId);
   const url = "/api/students/" + studentId + "/update";
+  console.log(url);
   const data = {
     name: document.getElementById('name').value,
     school: document.getElementById('school').value,
   };
-  
+
   fetch(url, {
     method: 'PUT',
     headers: {
@@ -133,7 +81,7 @@ updateForm.addEventListener('submit', function(e) {
   .then(response => response.json())
   .then(data => {
     console.log('Success:', data);
-    location.reload(); // 刷新页面
+    location.reload();
   })
   .catch((error) => {
     console.error('Error:', error);

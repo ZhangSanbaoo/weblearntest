@@ -5,6 +5,7 @@
     <head>
         <link rel="stylesheet" href="/create_style.css">
         <meta charset="UTF-8">
+        <div style="margin-top: 100px;"></div>
         <title>Add A Skill</title>
     </head>
 
@@ -13,12 +14,22 @@
             Add A Skill
         </h1>
         <form action="/students/create" method="POST">
-            <label for="Name">Name:</label><br><br>
-            <input type="text" id="Name" name="Name"><br><br>
-            <label for="School">School:</label><br><br>
-            <input type="text" id="School" name="School"><br><br><br><br>
-            <input type="submit" value="Confirm">
+            <label for="Name">Name:</label>
+            <input type="text" id="Name" name="Name">
+            <div style="margin-top: 50px;"></div>
+            <label for="School">School:</label>
+            <input type="text" id="School" name="School">
+            <div style="margin-top: 50px;"></div>
+            <div style="display: flex; justify-content: center; align-items: center;">
+            <button class="red" type="submit">
+                <i class="icon ion-md-lock"></i> Confirm
+            </button>
+            </div>
         </form>
+        <div style="margin-top: 50px;"></div>
+        <div style="display: flex; justify-content: center;">
+            <img src="/images/EPF_logo_2021.png" alt="Epf logo" style="max-width: 7%; height: auto;">
+        </div>
     </body>
 
 </html>

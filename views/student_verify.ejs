@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Student Verify</title>
+  </head>
+
+  <script>
+    function calculateStudentId() {
+      const url = window.location.href;
+      const regex = /\/students\/(\d+)/;
+      const match = url.match(regex);
+      const studentId = match ? match[1] : "";
+      return studentId;
+    }
+
+    const updateForm = document.getElementById("updateForm");
+    window.addEventListener("DOMContentLoaded", () => {
+      const username = prompt("Please enter your username:").toString();
+      const password = prompt("Please enter your password:").toString();
+      const studentId = calculateStudentId().toString();
+      console.log(username, password, studentId);
+      const url = `/students/verify/${studentId}?username=${encodeURIComponent(
+        username
+      )}&password=${encodeURIComponent(password)}`;
+      console.log(url);
+      // 跳转到url
+      window.location.href = url;
+    });
+  </script>
+</html>
