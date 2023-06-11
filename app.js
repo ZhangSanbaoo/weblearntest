@@ -27,10 +27,12 @@ app.use("/api/students", studentRouter);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+//route that demand login
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'views/login.html'));
 });
 
+// login request, if valid then go to home page, else fresh the login page with a alert
 app.post('/login', (req, res) => {
   myAsyncAuthorizer(req.body.Username, req.body.Password, (error, result) => {
     if (error) {
@@ -46,10 +48,12 @@ app.post('/login', (req, res) => {
   });
 });
 
+//basic home page
 app.get('/home', requireLogin, (req, res) => {
   res.sendFile(path.join(__dirname, 'views/home.html'));
 });
 
+//students page which made on tp2
 app.get("/students", (req, res) => {
   getStudentsFromCsvfile((err, students) => {
     if (err) {
@@ -60,6 +64,7 @@ app.get("/students", (req, res) => {
   });
 });
 
+//post request to create an student, when done will refresh the page
 app.post("/students/create", (req, res) => {
   console.log(req.body);
   const csvLine = `\n${req.body.Name},${req.body.School}`;
@@ -92,10 +97,12 @@ app.get("/students-csv-parsed", (req, res) => {
   });
 });
 
+//students data page which display 2 charts
 app.get("/students/data", (req, res) => {
   res.render("students_data");
 });
 
+//students create page where you can input new student's information and add into the csv file
 app.get("/students/create", (req, res) => {
   res.render("create-student");
 });
@@ -119,6 +126,8 @@ app.post("/api/login", (req, res) => {
 //   res.render('student_details', { student: fakeStudent });
 // });
 
+//student's personal page, id here is the index of that student in csv file
+//this site contains an update information function.
 app.get('/students/:id', (req, res) => {
   const id = req.params.id;
   console.log(id);
@@ -135,6 +144,7 @@ app.get('/students/:id', (req, res) => {
   });
 });
 
+//this is to help the authentication to each student's personal file
 app.get('/students/verify/:id', (req, res) => {
   const username = req.query.username;
   const password = req.query.password;
@@ -157,6 +167,7 @@ app.get('/students/verify/:id', (req, res) => {
   }
 });
 
+//here is where we process data from student's personal page to update student's information.
 app.post('/students/:id', (req, res) => {
   const id = req.params.id;
   console.log(id);
@@ -171,6 +182,7 @@ app.post('/students/:id', (req, res) => {
   });
 });
 
+//same as post but use put method
 app.put('/api/students/:id/update', (req, res) => {
   const updatedStudent = `${req.body.name},${req.body.school}`;
   const id = req.params.id;
